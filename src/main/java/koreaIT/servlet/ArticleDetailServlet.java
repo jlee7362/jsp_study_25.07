@@ -1,12 +1,9 @@
-package koreaIT;
+package koreaIT.servlet;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -15,14 +12,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/article/list")
-public class ArticleListServlet extends HttpServlet {
+import koreaIT.util.DBUtil;
+import koreaIT.util.SecSql;
+
+@WebServlet("/article/detail")
+public class ArticleDetailServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		response.setContentType("text/html;charset=UTF-8");
-
+		
 		Connection conn = null;
 
 		try {
@@ -32,6 +32,10 @@ public class ArticleListServlet extends HttpServlet {
 			System.out.println("연결 성공!");
 			
 			response.getWriter().append("연결성공");
+			
+			int id = Integer.parseInt(request.getParameter("id"));
+			
+			System.out.println(id);
 			//select 테스트
 			
 			DBUtil dbUtil = new DBUtil(request, response);
@@ -39,11 +43,14 @@ public class ArticleListServlet extends HttpServlet {
 			SecSql sql = new SecSql();
 			sql.append("SELECT *");
 			sql.append("FROM `article`");
+			sql.append("WHERE `id`=?;",id);
+		
 			
-			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
+			Map<String, Object> articleRow = dbUtil.selectRow(conn, sql);
+
+			request.setAttribute("articleRow", articleRow); //jsp에 데이터를 넘겨준다.
+			request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
 			
-			request.setAttribute("articleRows", articleRows); //jsp에 데이터를 넘겨준다.
-			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
 			
 //			 response.getWriter().append(articleRows.toString());
 			
