@@ -24,8 +24,6 @@ public class ArtivleListServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 
 		Connection conn = null;
-		PreparedStatement pstmt = null;
-        ResultSet rs = null;
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
