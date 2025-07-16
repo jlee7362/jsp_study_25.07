@@ -12,5 +12,7 @@ public class PrintDan extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("/jsp/home/printDan.jsp").forward(request, response);
+		
+		
 	}
 }

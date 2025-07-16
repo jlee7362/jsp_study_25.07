@@ -15,14 +15,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/ArtivleListServlet")
-public class ArtivleListServlet extends HttpServlet {
+@WebServlet("/article/detail")
+public class ArticleDetailServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		response.setContentType("text/html;charset=UTF-8");
-
+		
 		Connection conn = null;
 
 		try {
@@ -32,6 +32,10 @@ public class ArtivleListServlet extends HttpServlet {
 			System.out.println("연결 성공!");
 			
 			response.getWriter().append("연결성공");
+			
+			int id = Integer.parseInt(request.getParameter("id"));
+			
+			System.out.println(id);
 			//select 테스트
 			
 			DBUtil dbUtil = new DBUtil(request, response);
@@ -39,11 +43,13 @@ public class ArtivleListServlet extends HttpServlet {
 			SecSql sql = new SecSql();
 			sql.append("SELECT *");
 			sql.append("FROM `article`");
+			sql.append("WHERE `id`=?;",id);
+		
 			
-			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
+			Map<String, Object> articleRow = dbUtil.selectRow(conn, sql);
 
-			request.setAttribute("articleRows", articleRows); //jsp에 데이터를 넘겨준다.
-			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
+			request.setAttribute("articleRow", articleRow); //jsp에 데이터를 넘겨준다.
+			request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
 			
 			
 //			 response.getWriter().append(articleRows.toString());

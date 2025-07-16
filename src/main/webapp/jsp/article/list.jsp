@@ -41,13 +41,12 @@ List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getA
 		<%
 		for (Map<String, Object> articleRow : articleRows) {
 		%>
-		<li><%=articleRow.get("id")%>번, <%=articleRow.get("title")%>,
-			<%=articleRow.get("body")%></li>
+		<li><%=articleRow.get("id")%>번, <%=articleRow.get("title")%>, <%=articleRow.get("body")%></li>
 		<%
 		}
 		%>
 	</ul>
-	
+
 </body>
 </html>
 
