@@ -44,7 +44,13 @@ public class ArtivleListServlet extends HttpServlet {
 			
 			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
 
-			 response.getWriter().append(articleRows.toString());
+			request.setAttribute("articleRows", articleRows); //jsp에 데이터를 넘겨준다.
+			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
+			
+			
+//			 response.getWriter().append(articleRows.toString());
+			
+			
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패" + e);
 		} catch (SQLException e) {
@@ -58,10 +64,6 @@ public class ArtivleListServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-
-		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		
 		
 		
 	}
