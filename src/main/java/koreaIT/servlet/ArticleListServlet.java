@@ -40,18 +40,21 @@ public class ArticleListServlet extends HttpServlet {
 			if(request.getParameter("page") != null && request.getParameter("page").length() !=0 || Integer.parseInt(request.getParameter("page")) > 0) {
 				page = Integer.parseInt(request.getParameter("page"));
 			}
-			else {
-				page =1;
-			}
 		
 			
 			int itemsInAPage = 10;
 			int limitFrom = (page - 1) * itemsInAPage;
 			
-			
 			DBUtil dbUtil = new DBUtil(request, response);
 			
 			SecSql sql = new SecSql();
+			sql.append("SELECT COUNT(*)");
+			sql.append("FROM `article`");
+			
+			int totalCnt = DBUtil.selectRowIntValue(conn, sql);
+			int totalPage = (int)Math.ceil(totalCnt/(double)itemsInAPage);
+
+			sql = new SecSql();
 			sql.append("SELECT *");
 			sql.append("FROM `article`");
 			sql.append("limit ?, ?", limitFrom, itemsInAPage);
@@ -59,8 +62,6 @@ public class ArticleListServlet extends HttpServlet {
 			
 			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
 			
-			int totalCnt = DBUtil.selectRowIntValue(conn, sql);
-			int totalPage = (int)Math.ceil(totalCnt/(double)itemsInAPage);
 			
 			request.setAttribute("articleRows", articleRows); //jsp에 데이터를 넘겨준다.
 			request.setAttribute("page", page); 

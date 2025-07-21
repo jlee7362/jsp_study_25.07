@@ -7,8 +7,7 @@
 List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getAttribute("articleRows");
 int cPage = (int)request.getAttribute("page");
 int totalCnt = (int)request.getAttribute("totalCnt");
-int totalPage = (int)request.getAttribute("pagetotalPage");
-
+int totalPage = (int)request.getAttribute("totalPage");
 %>
 
 <!DOCTYPE html>
@@ -25,6 +24,9 @@ table>thead>tr>th, table>tbody>tr>td {
 <body>
 	<a href="../home/main">메인으로 이동</a>
 	<h2>게시글 목록</h2>
+	<div>
+		총 게시글 수:
+		<%=totalCnt%></div>
 	<table
 		style="border-collapse: collapse; border-color: black; margin: auto;"
 		border="2px";>
@@ -55,14 +57,23 @@ table>thead>tr>th, table>tbody>tr>td {
 			%>
 		</tbody>
 	</table>
-	
-<style>
 
+	<style>
+.page>a {
+	color: black;
+	text-decoration: none;
+}
+
+.page>a.cPage {
+	color: red;
+	text-decoration: underline;
+}
 </style>
-<div class="page">
-<%for (int i = 1; i <=totalPage; i++){%>
-<a class ="<%=cPage == i ? "cPage" : "" %>" href="list?page=<%=%></a>
-</div>
+	<div class="page">
+		<%for (int i = 1; i <=totalPage; i++){%>
+		<a class="<%=cPage == i ? "cPage" : "" %>" href="list?page=<%=i%>"><%=i%></a>
+		<%}%>
+	</div>
 </body>
 </html>
 
