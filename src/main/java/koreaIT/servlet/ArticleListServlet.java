@@ -21,7 +21,7 @@ public class ArticleListServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		response.setContentType("text/html;charset=UTF-8");
 
 		Connection conn = null;
@@ -31,49 +31,43 @@ public class ArticleListServlet extends HttpServlet {
 			String url = "jdbc:mysql://127.0.0.1:3306/AM_jsp_2025_07?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
 			conn = DriverManager.getConnection(url, "root", "");
 			System.out.println("연결 성공!");
-			
+
 			response.getWriter().append("연결성공");
 
-			//파라미터
+			// 파라미터
 			int page = 1;
-			
-			if(request.getParameter("page") != null && request.getParameter("page").length() !=0 || Integer.parseInt(request.getParameter("page")) > 0) {
+
+			if (request.getParameter("page") != null && request.getParameter("page").length() != 0) {
 				page = Integer.parseInt(request.getParameter("page"));
 			}
-		
-			
+
 			int itemsInAPage = 10;
 			int limitFrom = (page - 1) * itemsInAPage;
-			
+
 			DBUtil dbUtil = new DBUtil(request, response);
-			
+
 			SecSql sql = new SecSql();
 			sql.append("SELECT COUNT(*)");
 			sql.append("FROM `article`");
-			
+
 			int totalCnt = DBUtil.selectRowIntValue(conn, sql);
-			int totalPage = (int)Math.ceil(totalCnt/(double)itemsInAPage);
+			int totalPage = (int) Math.ceil(totalCnt / (double) itemsInAPage);
 
 			sql = new SecSql();
 			sql.append("SELECT *");
 			sql.append("FROM `article`");
 			sql.append("limit ?, ?", limitFrom, itemsInAPage);
-			
-			
+
 			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
-			
-			
-			request.setAttribute("articleRows", articleRows); //jsp에 데이터를 넘겨준다.
-			request.setAttribute("page", page); 
+
+			request.setAttribute("articleRows", articleRows); // jsp에 데이터를 넘겨준다.
+			request.setAttribute("page", page);
 			request.setAttribute("totalCnt", totalCnt);
-			request.setAttribute("totalPage", totalPage); 
+			request.setAttribute("totalPage", totalPage);
 			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);
-			
-			
-			
+
 //			 response.getWriter().append(articleRows.toString());
-			
-			
+
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패" + e);
 		} catch (SQLException e) {
@@ -87,7 +81,6 @@ public class ArticleListServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		
-		
+
 	}
 }

@@ -17,6 +17,14 @@ int totalPage = (int)request.getAttribute("totalPage");
 <title>Insert title here</title>
 </head>
 <style>
+body>div{
+	text-align: center;
+	margin-bottom: 20px;
+}
+.page{
+	text-align: center;
+	margin-top: 20px;
+}
 table>thead>tr>th, table>tbody>tr>td {
 	padding: 5px;
 }
