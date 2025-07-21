@@ -17,10 +17,7 @@ int totalPage = (int)request.getAttribute("totalPage");
 <title>Insert title here</title>
 </head>
 <style>
-body>div{
-	text-align: center;
-	margin-bottom: 20px;
-}
+
 .page{
 	text-align: center;
 	margin-top: 20px;
@@ -31,6 +28,9 @@ table>thead>tr>th, table>tbody>tr>td {
 </style>
 <body>
 	<a href="../home/main">메인으로 이동</a>
+	<div><a href="write">글쓰기</a></div>
+	
+	
 	<h2>게시글 목록</h2>
 	<div>
 		총 게시글 수:
