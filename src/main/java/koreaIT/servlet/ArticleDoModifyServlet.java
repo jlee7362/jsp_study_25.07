@@ -50,8 +50,8 @@ public class ArticleDoModifyServlet extends HttpServlet {
 			
 			dbUtil.update(conn, sql);
 
-			response.getWriter().append(String.format("<script>alert('%d번 글이 수정됨');location.replace('list'); </script>", id));
 
+			response.getWriter().append(String.format("<script>alert('%d번 글이 수정됨');location.replace('list'); </script>", id));
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패" + e);
 		} catch (SQLException e) {
