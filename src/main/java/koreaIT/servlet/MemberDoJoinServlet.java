@@ -42,9 +42,23 @@ public class MemberDoJoinServlet extends HttpServlet {
 			System.out.println("name : " + name);
 			
 			DBUtil dbUtil = new DBUtil(request, response);
-
 			
+//			아이디 중복체크
 			SecSql sql = new SecSql();
+			sql.append("SELECT COUNT(*)");
+			sql.append("FROM `member`");
+			sql.append("WHERE `loginId`=?", loginId);
+			
+			boolean isJoinableId = dbUtil.selectRowBooleanValue(conn, sql) == false;
+			
+			System.out.println("isJoinableId : " + isJoinableId);
+			
+			if(!isJoinableId) {
+				response.getWriter().append(String.format("<script>alert('%s는 이미 사용중입니다.'); location.replace('../member/join'); </script>", loginId));
+				return;
+			}
+
+			sql = new SecSql();
 			sql.append("INSERT INTO `member`");
 			sql.append("SET `regDate` = NOW(),");
 			sql.append("`updateDate` = NOW(),");
