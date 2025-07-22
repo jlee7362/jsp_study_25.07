@@ -45,7 +45,7 @@ table>thead>tr>th, table>tbody>tr>td {
 				<th>수정날짜</th>
 				<th>제목</th>
 				<th>내용</th>
-				<th>비고</th>
+				<th>삭제</th>
 			</tr>
 		</thead>
 		<tbody>

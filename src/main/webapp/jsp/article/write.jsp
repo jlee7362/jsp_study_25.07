@@ -8,7 +8,7 @@
 </head>
 <body>
 	<h2>글쓰기</h2>
-	<form action="doWrite" method="POST">
+	<form action="doWrite" method="post">
 		<div>제목 : <input type="text" name="title"></div>
 		<div>내용 : <input type="text" name="body" /></div>
 		<button type="submit">글작성</button>

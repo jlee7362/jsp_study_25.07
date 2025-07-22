@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,46 +15,37 @@ import javax.servlet.http.HttpServletResponse;
 import koreaIT.util.DBUtil;
 import koreaIT.util.SecSql;
 
-@WebServlet("/article/doWrite")
-public class ArticleDoWriteServlet extends HttpServlet {
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+@WebServlet("/article/modify")
+public class ArticleModifyServlet extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		response.setContentType("text/html;charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 
 		Connection conn = null;
-
+		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			String url = "jdbc:mysql://127.0.0.1:3306/AM_jsp_2025_07?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul";
 			conn = DriverManager.getConnection(url, "root", "");
 			System.out.println("연결 성공!");
 
-			response.getWriter().append("연결성공");
-
-			String title = request.getParameter("title");
-			String body = request.getParameter("body");
-
-			System.out.println("title" + title);
-			System.out.println("body" + body);
+			int id = Integer.parseInt(request.getParameter("id"));
+			System.out.println("modify id : " + id);
 			
 			DBUtil dbUtil = new DBUtil(request, response);
-
 			
 			SecSql sql = new SecSql();
-			sql.append("INSERT INTO `article`");
-			sql.append("SET `regDate` = NOW(),");
-			sql.append("`updateDate` = NOW(),");
-			sql.append("`title` = ?,", title);
-			sql.append("`body` = ?;", body);
+			sql.append("SELECT *");
+			sql.append("FROM `article`");
+			sql.append("WHERE `id` = ?;", id);
+
+			Map<String, Object> articleRow = dbUtil.selectRow(conn, sql);
 			
+			request.setAttribute("articleRow", articleRow);
 
-			int id = dbUtil.insert(conn, sql);
-
-			response.getWriter().append(String.format("<script>alert('%d번 글이 등록됨!'); location.replace('list'); </script>", id));
-
+			request.getRequestDispatcher("/jsp/article/modify.jsp").forward(request,response);
+		
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패" + e);
 		} catch (SQLException e) {
@@ -67,6 +59,7 @@ public class ArticleDoWriteServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+		
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);

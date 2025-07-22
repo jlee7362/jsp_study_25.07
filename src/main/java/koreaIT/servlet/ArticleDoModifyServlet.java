@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import koreaIT.util.DBUtil;
 import koreaIT.util.SecSql;
 
-@WebServlet("/article/doWrite")
-public class ArticleDoWriteServlet extends HttpServlet {
+@WebServlet("/article/doModify")
+public class ArticleDoModifyServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -33,26 +33,24 @@ public class ArticleDoWriteServlet extends HttpServlet {
 
 			response.getWriter().append("연결성공");
 
+			int id = Integer.parseInt(request.getParameter("id"));
 			String title = request.getParameter("title");
 			String body = request.getParameter("body");
-
 			System.out.println("title" + title);
 			System.out.println("body" + body);
 			
 			DBUtil dbUtil = new DBUtil(request, response);
-
 			
 			SecSql sql = new SecSql();
-			sql.append("INSERT INTO `article`");
-			sql.append("SET `regDate` = NOW(),");
-			sql.append("`updateDate` = NOW(),");
+			sql.append("UPDATE `article`");
+			sql.append("SET `updateDate` = NOW(),");
 			sql.append("`title` = ?,", title);
-			sql.append("`body` = ?;", body);
+			sql.append("`body` = ?", body);
+			sql.append("WHERE `id` = ?;", id);
 			
+			dbUtil.update(conn, sql);
 
-			int id = dbUtil.insert(conn, sql);
-
-			response.getWriter().append(String.format("<script>alert('%d번 글이 등록됨!'); location.replace('list'); </script>", id));
+			response.getWriter().append(String.format("<script>alert('%d번 글이 수정됨');location.replace('list'); </script>", id));
 
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패" + e);
