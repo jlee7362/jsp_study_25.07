@@ -55,12 +55,15 @@ public class ArticleListServlet extends HttpServlet {
 
 			sql = new SecSql();
 			sql.append("SELECT *");
-			sql.append("FROM `article`");
-			sql.append("ORDER BY `id` DESC");
+			sql.append("FROM `article` a");
+			sql.append("INNER JOIN `member` m");
+			sql.append("ON a.memberId = m.id");
+			sql.append("ORDER BY a.`id` DESC");
 			sql.append("limit ?, ?", limitFrom, itemsInAPage);
 
 			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
-
+			
+			
 			request.setAttribute("articleRows", articleRows); // jsp에 데이터를 넘겨준다.
 			request.setAttribute("page", page);
 			request.setAttribute("totalCnt", totalCnt);

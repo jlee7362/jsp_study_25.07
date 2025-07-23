@@ -7,7 +7,6 @@
 Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("articleRow");
 %>
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,9 +19,9 @@ Map<String, Object> articleRow = (Map<String, Object>) request.getAttribute("art
 		<li><%=articleRow.get("id")%>번</li>
 		<li>등록날짜 : <%=articleRow.get("regDate")%></li>
 		<li>업데이트 날짜 : <%=articleRow.get("updateDate")%></li>
+		<li>작성자 : <%=articleRow.get("name")%></li>
 		<li>제목 : <%=articleRow.get("title")%></li>
 		<li>내용 : <%=articleRow.get("body")%></li>
-
 	</ul>
 	<div>
 		<a href="list">리스트로 돌아가기</a>

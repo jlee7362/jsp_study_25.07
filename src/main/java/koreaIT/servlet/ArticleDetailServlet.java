@@ -42,12 +42,14 @@ public class ArticleDetailServlet extends HttpServlet {
 			
 			SecSql sql = new SecSql();
 			sql.append("SELECT *");
-			sql.append("FROM `article`");
-			sql.append("WHERE `id`=?;",id);
+			sql.append("FROM `article` a");
+			sql.append("INNER JOIN `member` m");
+			sql.append("ON a.memberId = m.id");
+			sql.append("WHERE a.`id`=?;",id);
 		
 			
 			Map<String, Object> articleRow = dbUtil.selectRow(conn, sql);
-
+			//로그인 정보
 			request.setAttribute("articleRow", articleRow); //jsp에 데이터를 넘겨준다.
 			request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
 			

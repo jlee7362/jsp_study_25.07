@@ -41,6 +41,8 @@ public class ArticleDoWriteServlet extends HttpServlet {
 			Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
 			
 			int loginedMemberId = (int)loginedMember.get("id");
+			
+			
 		
 
 			String title = request.getParameter("title");
