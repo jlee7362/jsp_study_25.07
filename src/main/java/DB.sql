@@ -72,7 +72,8 @@ SET `regDate` = NOW(),
 	`loginPw` = CONCAT('pw', SUBSTR(RAND() * 1000 FROM 1 FOR 3)),
 	`name` = CONCAT('이름', SUBSTR(RAND() * 1000 FROM 1 FOR 2));
 
-##paging
+#####################################################################
+paging
 SELECT *
 FROM `article`
 LIMIT 10,5;
