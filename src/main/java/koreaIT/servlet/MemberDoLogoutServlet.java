@@ -16,8 +16,8 @@ import javax.servlet.http.HttpSession;
 import koreaIT.util.DBUtil;
 import koreaIT.util.SecSql;
 
-@WebServlet("/member/doLogin")
-public class MemberDoLoginServlet extends HttpServlet {
+@WebServlet("/member/doLogout")
+public class MemberDoLogoutServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -35,32 +35,13 @@ public class MemberDoLoginServlet extends HttpServlet {
 
 			response.getWriter().append("연결성공");
 
-			String loginId = request.getParameter("loginId");
-			String loginPw = request.getParameter("loginPw");
-			
-			DBUtil dbUtil = new DBUtil(request, response);
-			
-			SecSql sql = new SecSql();
-			sql.append("SELECT *");
-			sql.append("FROM `member`");
-			sql.append("WHERE `loginId` = ?;", loginId);
-			
-			Map<String, Object> memberRow = dbUtil.selectRow(conn, sql);
-
-			if(memberRow.isEmpty()) {
-				response.getWriter().append(String.format("<script>alert('%s는 없는 회원입니다.');location.replace('../member/login'); </script>", loginId));
-				return;
-			}
-			if(memberRow.get("loginPw").equals(loginPw) == false) {
-				response.getWriter().append(String.format("<script>alert('비밀번호가 틀립니다.');location.replace('../member/login'); </script>"));
-				return;
-			}
 			
 			HttpSession session = request.getSession();
-			session.setAttribute("loginedMember", memberRow);
+			
+			session.removeAttribute("loginedMember");
 			
 			
-			response.getWriter().append(String.format("<script>alert('%s회원 로그인 됨');location.replace('../home/main'); </script>", loginId));
+			response.getWriter().append(String.format("<script>alert('로그아웃 됨.');location.replace('../home/main'); </script>"));
 //			System.out.println(memberRow.toString());
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패" + e);

@@ -9,6 +9,7 @@
 <body>
 
 <a href="../home/main">메인으로 이동</a>
+<div><a href="../member/login">로그인 하기</a></div>
 <script type = "text/javascript">
 function JoinForm_submit(form){
 	let loginId = form.loginId.value.trim();
