@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import koreaIT.util.DBUtil;
 import koreaIT.util.SecSql;
@@ -62,10 +63,17 @@ public class ArticleListServlet extends HttpServlet {
 			sql.append("limit ?, ?", limitFrom, itemsInAPage);
 
 			List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
-			
-			
+
+			// 로그인정보
+			HttpSession session = request.getSession();
+			int loginedMemberId = -1;
+			if (session.getAttribute("loginedMemberId") != null) {
+				loginedMemberId = (int) session.getAttribute("loginedMemberId");
+			}
+
 			request.setAttribute("articleRows", articleRows); // jsp에 데이터를 넘겨준다.
 			request.setAttribute("page", page);
+			request.setAttribute("loginedMemberId", loginedMemberId);
 			request.setAttribute("totalCnt", totalCnt);
 			request.setAttribute("totalPage", totalPage);
 			request.getRequestDispatcher("/jsp/article/list.jsp").forward(request, response);

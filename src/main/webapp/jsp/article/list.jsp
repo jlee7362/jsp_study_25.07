@@ -9,6 +9,7 @@ List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getA
 int cPage = (int)request.getAttribute("page");
 int totalCnt = (int)request.getAttribute("totalCnt");
 int totalPage = (int)request.getAttribute("totalPage");
+int loginedMemberId = (int)request.getAttribute("loginedMemberId");
 
 %>
 
@@ -30,11 +31,15 @@ table>thead>tr>th, table>tbody>tr>td {
 </style>
 <body>
 	<a href="../home/main">메인으로 이동</a>
-	
-	
-	
-	<div><a href="write">글쓰기</a></div>
-	
+	<%
+	if (loginedMemberId != -1) {
+	%>
+	<div>
+		<a href="write">글쓰기</a>
+	</div>
+	<%
+	}
+	%>
 	
 	<h2>게시글 목록</h2>
 	<div>
