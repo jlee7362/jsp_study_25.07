@@ -20,7 +20,7 @@ import koreaIT.util.DBUtil;
 public class DispatcherServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		response.setContentType("text/html;charset=UTF-8");
 		String requestUri = request.getRequestURI();
 
 		response.getWriter().append("Served at: ").append(requestUri);
@@ -36,7 +36,7 @@ public class DispatcherServlet extends HttpServlet {
 //		System.out.println(reqUriBits[4]); //list
 
 		// DB 연결
-		response.setContentType("text/html;charset=UTF-8");
+		
 		Connection conn = null;
 
 		try {
