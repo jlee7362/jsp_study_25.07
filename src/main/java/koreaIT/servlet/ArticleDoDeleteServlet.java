@@ -48,10 +48,10 @@ public class ArticleDoDeleteServlet extends HttpServlet {
 			SecSql sql = new SecSql();
 			sql.append("SELECT *");
 			sql.append("FROM `article`");
-			sql.append("WHERE `id` =?", id);
+			sql.append("WHERE `id`=?", id);
 			
 			Map<String, Object> articleRow = dbUtil.selectRow(conn, sql);
-			int articleMemberId = (int) session.getAttribute("memberId");
+			int articleMemberId = (int) articleRow.get("memberId");
 			int loginedMemberId = (int) session.getAttribute("loginedMemberId");
 			if(articleMemberId != loginedMemberId) {
 				response.getWriter().append(String.format("<script>alert('%d번 글에 대한 권한이 없습니다.'); location.replace('list'); </script>",id));
