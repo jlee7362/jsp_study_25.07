@@ -26,8 +26,16 @@ public class DispatcherServlet extends HttpServlet {
 		response.getWriter().append("Served at: ").append(requestUri);
 
 		String[] reqUriBits = requestUri.split("/");
+
+		if (reqUriBits.length < 5) {
+			response.getWriter().append(
+					String.format("<script>alert('올바른 요청이 아닙니다.');location.replace('../home/main'); </script>"));
+		}
 		String controllerName = reqUriBits[3];
 		String actionMethodName = reqUriBits[4];
+
+		System.out.println("controllerName : " + controllerName);
+		System.out.println("actionMethodName : " + actionMethodName);
 
 //		System.out.println(reqUriBits[0]);
 //		System.out.println(reqUriBits[1]); //jlee_servlet
@@ -36,7 +44,7 @@ public class DispatcherServlet extends HttpServlet {
 //		System.out.println(reqUriBits[4]); //list
 
 		// DB 연결
-		
+
 		Connection conn = null;
 
 		try {
@@ -58,8 +66,28 @@ public class DispatcherServlet extends HttpServlet {
 			if (controllerName.equals("article")) {
 				ArticleController articleController = new ArticleController(request, response, conn);
 
-				if (actionMethodName.equals("list")) {
+				switch (actionMethodName) {
+				case "list":
 					articleController.showList();
+					break;
+				case "detail":
+					articleController.showDetail();
+					break;
+				case "write":
+					articleController.showWrite();
+					break;
+				case "doWrite":
+					articleController.showWrite();
+					break;
+				case "modify":
+					articleController.showModify();
+					break;
+				case "doModify":
+					articleController.showModify();
+					break;
+				case "doDelete":
+					articleController.doDelete();
+					break;
 				}
 			}
 		} catch (ClassNotFoundException e) {
