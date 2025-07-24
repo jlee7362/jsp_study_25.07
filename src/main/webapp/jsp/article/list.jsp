@@ -6,6 +6,9 @@
 <%
 List<Map<String, Object>> articleRows = (List<Map<String, Object>>) request.getAttribute("articleRows");
 
+Map<String, Object> loginedMember = (Map<String, Object>) session.getAttribute("loginedMember");
+request.getAttribute("loginedMember");
+
 int cPage = (int)request.getAttribute("page");
 int totalCnt = (int)request.getAttribute("totalCnt");
 int totalPage = (int)request.getAttribute("totalPage");
@@ -30,6 +33,8 @@ table>thead>tr>th, table>tbody>tr>td {
 }
 </style>
 <body>
+
+	<%@include file ="../part/top_bar.jspf" %>
 	<a href="../home/main">메인으로 이동</a>
 	<%
 	if (loginedMemberId != -1) {
@@ -56,8 +61,8 @@ table>thead>tr>th, table>tbody>tr>td {
 				<th>제목</th>
 				<th>내용</th>
 				<th>작성자</th>
-				<th>수정(todo)</th>
 				<th>삭제(todo)</th>
+				<th>수정(todo)</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -72,8 +77,9 @@ table>thead>tr>th, table>tbody>tr>td {
 				<td><%=articleRow.get("body")%></td>
 				<td><%=articleRow.get("name")%></td>
 				<!-- 이후 상세보기로 이동 to do -->
+				<td><a onclick="if(confirm('정말 삭제하시겠습니까?')==false){return false;}" href="doDelete?id=<%=articleRow.get("id")%>">삭제</a></td>
 				<td><a href="modify?id=<%=articleRow.get("id")%>">수정</a></td>
-				<td><a href="delete?id=<%=articleRow.get("id")%>">삭제</a></td>
+				
 			</tr>
 			<%
 			}
