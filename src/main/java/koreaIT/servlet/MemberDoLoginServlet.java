@@ -58,11 +58,11 @@ public class MemberDoLoginServlet extends HttpServlet {
 			
 			HttpSession session = request.getSession();
 			
-			session.setAttribute("loginedMember", memberRow);
+			session.setAttribute("loginedMember", memberRow); // 로그인 정보가 세션에 저장됨
 			session.setAttribute("loginedMemberId",(int)memberRow.get("id"));
 			
 			
-			response.getWriter().append(String.format("<script>alert('%s회원 로그인 됨');location.replace('../home/main'); </script>", loginId));
+			response.getWriter().append(String.format("<script>alert('%s회원 로그인 됨');location.replace('../s/home/main'); </script>", loginId));
 //			System.out.println(memberRow.toString());
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패" + e);

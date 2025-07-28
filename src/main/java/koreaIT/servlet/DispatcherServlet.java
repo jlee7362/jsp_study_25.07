@@ -77,13 +77,13 @@ public class DispatcherServlet extends HttpServlet {
 					articleController.showWrite();
 					break;
 				case "doWrite":
-					articleController.showWrite();
+					articleController.doWrite();
 					break;
 				case "modify":
 					articleController.showModify();
 					break;
 				case "doModify":
-					articleController.showModify();
+					articleController.doModify();
 					break;
 				case "doDelete":
 					articleController.doDelete();

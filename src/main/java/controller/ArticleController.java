@@ -28,11 +28,11 @@ public class ArticleController {
 	private boolean isLogined() {
 		return request.getSession().getAttribute("loginedMemberId") != null;
 	}
-	
+
 	private int getLoginedMemberId() {
 		return (int) request.getSession().getAttribute("loginedMemberId");
 	}
-	
+
 	public void showList() throws ServletException, IOException {
 
 		// 파라미터
@@ -100,50 +100,29 @@ public class ArticleController {
 		// 로그인 정보
 		request.setAttribute("articleRow", articleRow); // jsp에 데이터를 넘겨준다.
 		request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
-
-	}catch(
-
-	ClassNotFoundException e)
-	{
-		System.out.println("드라이버 로딩 실패" + e);
-	}catch(
-	SQLException e)
-	{
-		System.out.println("에러 : " + e);
-	}finally
-	{
-		try {
-			if (conn != null && !conn.isClosed()) {
-				conn.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	}
+	
+	} 
 
 	public void showWrite() throws ServletException, IOException {
-		if (isLogined()) {
-			response.getWriter().append(
-					String.format("<script>alert('로그인 후 이용하세요');location.replace('../member/login'); </script>"));
-			return;
-		}
+//		if (isLogined()) {
+//			response.getWriter().append(
+//					String.format("<script>alert('로그인 후 이용하세요');location.replace('list'); </script>"));
+//			return;
+//		}
 
 		request.getRequestDispatcher("/jsp/article/write.jsp").forward(request, response);
 
 	}
 
 	public void doWrite() throws ServletException, IOException {
-
-		int loginedMemberId = (int) session.getAttribute("loginedMemberId");
+//		if (isLogined()) {
+//		response.getWriter().append(
+//				String.format("<script>alert('로그인 후 이용하세요');location.replace('list'); </script>"));
+//		return;
+//	}
 
 		String title = request.getParameter("title");
 		String body = request.getParameter("body");
-
-		System.out.println("title" + title);
-		System.out.println("body" + body);
 
 		DBUtil dbUtil = new DBUtil(request, response);
 
@@ -151,7 +130,7 @@ public class ArticleController {
 		sql.append("INSERT INTO `article`");
 		sql.append("SET `regDate` = NOW(),");
 		sql.append("`updateDate` = NOW(),");
-		sql.append("`memberId` = ?,", loginedMemberId);
+		sql.append("`memberId` = ?,", getLoginedMemberId());
 		sql.append("`title` = ?,", title);
 		sql.append("`body` = ?;", body);
 
@@ -162,7 +141,22 @@ public class ArticleController {
 	}
 
 	public void showModify() throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		int id = Integer.parseInt(request.getParameter("id"));
+		
+		DBUtil dbUtil = new DBUtil(request, response);
+		SecSql sql = new SecSql();
+		sql.append("SELECT *");
+		sql.append("FROM `article`");
+		sql.append("WHERE `id`=?",id);
+		
+		Map<String, Object> articleRow = dbUtil.selectRow(conn, sql);
+		
+		if(articleRow.isEmpty()) {
+			response.getWriter().append(String.format("<script>alert('%d번 글은 존재하지 않습니다.').location.replace('list');</script>", id));
+			return;
+		}
+		request.setAttribute("articleRow", articleRow);
+		request.getRequestDispatcher("/jsp/article/modify.jsp").forward(request, response);
 
 	}
 
@@ -170,8 +164,6 @@ public class ArticleController {
 		int id = Integer.parseInt(request.getParameter("id"));
 		String title = request.getParameter("title");
 		String body = request.getParameter("body");
-		System.out.println("title" + title);
-		System.out.println("body" + body);
 
 		DBUtil dbUtil = new DBUtil(request, response);
 
@@ -190,15 +182,11 @@ public class ArticleController {
 	}
 
 	public void doDelete() throws ServletException, IOException {
-		// 로그인 체크
-
-		HttpSession session = request.getSession();
-		if (session.getAttribute("loginedMemberId") == null) {
+		if (!isLogined()) {
 			response.getWriter()
 					.append(String.format("<script>alert('로그인하고 오세요.'); location.replace('list'); </script>"));
-			return;
 		}
-
+		
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		SecSql sql = new SecSql();
@@ -210,7 +198,8 @@ public class ArticleController {
 
 		Map<String, Object> articleRow = dbUtil.selectRow(conn, sql);
 		int articleMemberId = (int) articleRow.get("memberId");
-		int loginedMemberId = getLoginedMemberId;
+		int loginedMemberId = getLoginedMemberId();
+		
 		if (articleMemberId != loginedMemberId) {
 			response.getWriter().append(
 					String.format("<script>alert('%d번 글에 대한 권한이 없습니다.'); location.replace('list'); </script>", id));
