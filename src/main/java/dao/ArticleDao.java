@@ -1,4 +1,4 @@
-package controller;
+package dao;
 
 import java.sql.Connection;
 import java.util.List;
@@ -34,6 +34,7 @@ public class ArticleDao {
 		sql.append("ON a.memberId = m.id");
 		sql.append("ORDER BY a.`id` DESC");
 		sql.append("limit ?, ?", limitFrom, itemsInAPage);
+		 
 		
 		return DBUtil.selectRows(conn, sql);
 	}

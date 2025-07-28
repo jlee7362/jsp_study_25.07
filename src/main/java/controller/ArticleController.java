@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dto.Article;
 import koreaIT.util.DBUtil;
 import koreaIT.util.SecSql;
+import service.ArticleService;
 
 public class ArticleController {
 	private HttpServletRequest request;
@@ -64,7 +66,7 @@ public class ArticleController {
 		sql.append("ORDER BY a.`id` DESC");
 		sql.append("limit ?, ?", limitFrom, itemsInAPage);
 
-		List<Map<String, Object>> articleRows = articleService.getArticleRows(limitFrom,itemsInAPage);
+		List<Article> articleRows = articleService.getArticleRows(limitFrom,itemsInAPage);
 
 		// 로그인정보
 		HttpSession session = request.getSession();
