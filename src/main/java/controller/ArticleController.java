@@ -53,7 +53,6 @@ public class ArticleController {
 		sql.append("SELECT COUNT(*)");
 		sql.append("FROM `article`;");
 
-//		int totalCnt = DBUtil.selectRowIntValue(conn, sql);
 		int totalCnt = articleService.getTotalCnt();
 		int totalPage = (int) Math.ceil(totalCnt / (double) itemsInAPage);
 
