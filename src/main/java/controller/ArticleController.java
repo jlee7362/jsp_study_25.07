@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -100,26 +99,28 @@ public class ArticleController {
 		// 로그인 정보
 		request.setAttribute("articleRow", articleRow); // jsp에 데이터를 넘겨준다.
 		request.getRequestDispatcher("/jsp/article/detail.jsp").forward(request, response);
-	
-	} 
+
+	}
 
 	public void showWrite() throws ServletException, IOException {
-//		if (isLogined()) {
-//			response.getWriter().append(
-//					String.format("<script>alert('로그인 후 이용하세요');location.replace('list'); </script>"));
-//			return;
-//		}
+		// 로그인 체크
+		if (!isLogined()) {
+			response.getWriter().append(
+					String.format("<script>alert('로그인 후 이용하세요');location.replace('../member/login'); </script>"));
+			return;
+		}
 
 		request.getRequestDispatcher("/jsp/article/write.jsp").forward(request, response);
 
 	}
 
 	public void doWrite() throws ServletException, IOException {
-//		if (isLogined()) {
-//		response.getWriter().append(
-//				String.format("<script>alert('로그인 후 이용하세요');location.replace('list'); </script>"));
-//		return;
-//	}
+		// 로그인 체크
+		if (!isLogined()) {
+			response.getWriter().append(
+					String.format("<script>alert('로그인 후 이용하세요');location.replace('../member/login'); </script>"));
+			return;
+		}
 
 		String title = request.getParameter("title");
 		String body = request.getParameter("body");
@@ -141,18 +142,25 @@ public class ArticleController {
 	}
 
 	public void showModify() throws ServletException, IOException {
+		//로그인 체크
+				if (!isLogined()) {
+				response.getWriter().append(
+						String.format("<script>alert('로그인 후 이용하세요');location.replace('../home/main'); </script>"));
+				return;
+			}
 		int id = Integer.parseInt(request.getParameter("id"));
-		
+
 		DBUtil dbUtil = new DBUtil(request, response);
 		SecSql sql = new SecSql();
 		sql.append("SELECT *");
 		sql.append("FROM `article`");
-		sql.append("WHERE `id`=?",id);
-		
+		sql.append("WHERE `id`=?", id);
+
 		Map<String, Object> articleRow = dbUtil.selectRow(conn, sql);
-		
-		if(articleRow.isEmpty()) {
-			response.getWriter().append(String.format("<script>alert('%d번 글은 존재하지 않습니다.').location.replace('list');</script>", id));
+
+		if (articleRow.isEmpty()) {
+			response.getWriter()
+					.append(String.format("<script>alert('%d번 글은 존재하지 않습니다.').location.replace('list');</script>", id));
 			return;
 		}
 		request.setAttribute("articleRow", articleRow);
@@ -161,6 +169,12 @@ public class ArticleController {
 	}
 
 	public void doModify() throws ServletException, IOException {
+		//로그인 체크
+		if (!isLogined()) {
+		response.getWriter().append(
+				String.format("<script>alert('로그인 후 이용하세요');location.replace('../home/main'); </script>"));
+		return;
+	}
 		int id = Integer.parseInt(request.getParameter("id"));
 		String title = request.getParameter("title");
 		String body = request.getParameter("body");
@@ -187,6 +201,8 @@ public class ArticleController {
 					.append(String.format("<script>alert('로그인하고 오세요.'); location.replace('list'); </script>"));
 		}
 		
+		
+
 		int id = Integer.parseInt(request.getParameter("id"));
 
 		SecSql sql = new SecSql();
@@ -199,13 +215,12 @@ public class ArticleController {
 		Map<String, Object> articleRow = dbUtil.selectRow(conn, sql);
 		int articleMemberId = (int) articleRow.get("memberId");
 		int loginedMemberId = getLoginedMemberId();
-		
+
 		if (articleMemberId != loginedMemberId) {
 			response.getWriter().append(
 					String.format("<script>alert('%d번 글에 대한 권한이 없습니다.'); location.replace('list'); </script>", id));
 			return;
 		}
-		;
 
 		sql = new SecSql();
 		sql.append("DELETE FROM `article`");

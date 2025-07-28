@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import controller.ArticleController;
+import controller.HomeController;
 import koreaIT.util.DBUtil;
 
 @WebServlet("/s/*")
@@ -36,16 +37,14 @@ public class DispatcherServlet extends HttpServlet {
 
 		System.out.println("controllerName : " + controllerName);
 		System.out.println("actionMethodName : " + actionMethodName);
-
-//		System.out.println(reqUriBits[0]);
-//		System.out.println(reqUriBits[1]); //jlee_servlet
-//		System.out.println(reqUriBits[2]); //s
-//		System.out.println(reqUriBits[3]); //article
-//		System.out.println(reqUriBits[4]); //list
-
+		
 		// DB 연결
-
 		Connection conn = null;
+		
+		if(controllerName.equals("home")) {
+			HomeController homeController = new HomeController(request, response);
+			homeController.showMain();
+		}
 
 		try {
 
