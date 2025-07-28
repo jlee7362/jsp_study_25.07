@@ -17,11 +17,14 @@ public class ArticleController {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private Connection conn;
+	private ArticleService articleService;
 
 	public ArticleController(HttpServletRequest request, HttpServletResponse response, Connection conn) {
 		this.request = request;
 		this.response = response;
 		this.conn = conn;
+		
+		this.articleService = new ArticleService(conn);
 	}
 
 	private boolean isLogined() {
@@ -50,7 +53,8 @@ public class ArticleController {
 		sql.append("SELECT COUNT(*)");
 		sql.append("FROM `article`;");
 
-		int totalCnt = DBUtil.selectRowIntValue(conn, sql);
+//		int totalCnt = DBUtil.selectRowIntValue(conn, sql);
+		int totalCnt = articleService.getTotalCnt();
 		int totalPage = (int) Math.ceil(totalCnt / (double) itemsInAPage);
 
 		sql = new SecSql();
@@ -61,7 +65,7 @@ public class ArticleController {
 		sql.append("ORDER BY a.`id` DESC");
 		sql.append("limit ?, ?", limitFrom, itemsInAPage);
 
-		List<Map<String, Object>> articleRows = dbUtil.selectRows(conn, sql);
+		List<Map<String, Object>> articleRows = articleService.getArticleRows(limitFrom,itemsInAPage);
 
 		// 로그인정보
 		HttpSession session = request.getSession();
@@ -106,7 +110,7 @@ public class ArticleController {
 		// 로그인 체크
 		if (!isLogined()) {
 			response.getWriter().append(
-					String.format("<script>alert('로그인 후 이용하세요');location.replace('../member/login'); </script>"));
+					String.format("<script>alert('로그인 후 이용하세요');location.replace('../home/main'); </script>"));
 			return;
 		}
 
@@ -160,7 +164,7 @@ public class ArticleController {
 
 		if (articleRow.isEmpty()) {
 			response.getWriter()
-					.append(String.format("<script>alert('%d번 글은 존재하지 않습니다.').location.replace('list');</script>", id));
+					.append(String.format("<script>alert('%d번 글은 존재하지 않습니다.');location.replace('list');</script>", id));
 			return;
 		}
 		request.setAttribute("articleRow", articleRow);
